@@ -18,20 +18,38 @@ else:
 
 #define count_questions(file_path: str)
 def count_questions():
-    global file_path
-
     with open(file_path, "r") as file:
         content = file.read()
         return content.count("<question>")
+    
 #define get_question()
+def get_question(code: int):
+    with open(file_path, "r") as file:
+        content = file.read()
+        ques_index = content.find(f"<{code:b}> <question>")
+        return content[ques_index].replace(f"<{code:b}> <question>", "")
+
 #define get_choices()
 #define get_correct()
 #define check_ans()
+
 #define change_dir(new_file: str)
+def change_dir(new_file: str):
+    global file_path
+
+    file_path = Path("~", "Documents", new_file + ".txt").expanduser()
+    if file_path.exists():
+        print(f"Moved to new file: {new_file + ".txt"}")
+    
+    else: 
+        print(f"{new_file + ".txt"} does not exist, moving back to default directory...")
+        file_path = Path("~", "Documents", "questions.txt").expanduser()
+
 #initiate infinite while-loop
 #create a menu with different options and features:
 #show in the menu which file is currently opened
 #show in the menu how many questions are contained in the file
 #option: Ask random question; program asks a random question
 #option: Ask all questions; still random, but asks all questions
+#option: Change directory; change which file the program will access
 #option: Quit program; breaks the loop and closes the program
