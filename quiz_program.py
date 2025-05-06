@@ -1,9 +1,10 @@
 #import pathlib and time
 from pathlib import Path
 import time
+import random
 
 #initialize file_path and file_exists
-file_path = Path("~", "Documents", "questions.txt").expanduser()
+file_path = Path("~", "Documents", "questions_2.txt").expanduser()
 file_exists: bool = None
 
 #program checks if questions.txt exists, if so, set file_exists to True. Otherwise, False
@@ -27,7 +28,8 @@ def get_question(code: int) -> str:
     with open(file_path, "r") as file:
         content = file.read()
         ques_index = content.find(f"<{code:b}> <question>")
-        return content[ques_index].replace(f"<{code:b}> <question>", "")
+        spec_ques = content[ques_index].replace(f"<{code:b}> <question>:", "")
+        return spec_ques
 
 #define get_choices()
 def get_choices(code: int) -> list:
@@ -61,8 +63,6 @@ def check_ans(user_input: str, correct: str) -> bool:
     else:
         return False
 
-
-
 #define change_dir(new_file: str)
 def change_dir(new_file: str):
     global file_path
@@ -75,13 +75,59 @@ def change_dir(new_file: str):
         print(f"{new_file + ".txt"} does not exist, moving back to default directory...")
         file_path = Path("~", "Documents", "questions.txt").expanduser()
 
+#define current_dir()
+def current_dir() -> str:
+    with open(file_path, "r") as file:
+        return Path(file.name)
+
 #initiate infinite while-loop
 while file_exists: 
-    pass
-#create a menu with different options and features:
-#show in the menu which file is currently opened
-#show in the menu how many questions are contained in the file
-#option: Ask random question; program asks a random question
-#option: Ask all questions; still random, but asks all questions
-#option: Change directory; change which file the program will access
-#option: Quit program; breaks the loop and closes the program
+    local_count = count_questions()
+    local_path = current_dir()
+    ques_range = range(local_count)
+
+    #Create the main menu:
+    print(f"""
+Welcome to the Quizzler!
+
+File currently opened: {local_path}
+There are {local_count} questions in this file.
+Main Menu:
+
+[1] Ask Random Question
+[2] Ask All Questions
+[3] Change Directory
+[4] Quit Program
+""")
+    #Create prompt to choose among the given options
+    while True:
+        user_select = input("Select from the menu above!")
+        if user_select.isnumeric and int(user_select) < 5:
+            break
+        else:
+            continue
+    
+    user_select = int(user_select)
+
+    #option: Ask random question; program asks a random question
+    if user_select == 1:
+        rand_ques_indx = random.choice(ques_range)
+        print("Okay! Giving you a random question now: ")
+        print(get_question(rand_ques_indx))
+
+        for i in get_choices(rand_ques_indx):
+            print(i)
+
+        correct_ans = get_correct(rand_ques_indx)
+
+        time.sleep(3)
+        user_ans = input("Answer: ")
+
+        if check_ans(user_ans, correct_ans):
+            print("Very good! You answered correctly!")
+        else:
+            print(f"Sorry, your answer is wrong! The answer was: {correct_ans}")
+
+    #option: Ask all questions; still random, but asks all questions
+    #option: Change directory; change which file the program will access
+    #option: Quit program; breaks the loop and closes the program
