@@ -23,15 +23,45 @@ def count_questions():
         return content.count("<question>")
     
 #define get_question()
-def get_question(code: int):
+def get_question(code: int) -> str:
     with open(file_path, "r") as file:
         content = file.read()
         ques_index = content.find(f"<{code:b}> <question>")
         return content[ques_index].replace(f"<{code:b}> <question>", "")
 
 #define get_choices()
+def get_choices(code: int) -> list:
+    choice_list = list()
+
+    with open(file_path, "r") as file:
+        content = file.read()
+        choice_index = content.find(f"<{code:b}> <choice>")
+        for i in range(4):
+            choice_list.append(content[choice_index + i])
+            choice_list[i].replace(f"<{code:b}> <choice>", "")
+        
+        return choice_list
+
+            
 #define get_correct()
+def get_correct(code: int) -> str:
+    with open(file_path, "r") as file:
+        content = file.read()
+        corr_index = content.find(f"<{code:b}> <correct>")
+        return content[corr_index].replace(f"<{code:b}> <correct>", "")
+    
 #define check_ans()
+def check_ans(user_input: str, correct: str) -> bool: 
+    if user_input == correct:
+        return True
+    
+    elif correct.startswith(user_input):
+        return True
+    
+    else:
+        return False
+
+
 
 #define change_dir(new_file: str)
 def change_dir(new_file: str):
@@ -46,6 +76,8 @@ def change_dir(new_file: str):
         file_path = Path("~", "Documents", "questions.txt").expanduser()
 
 #initiate infinite while-loop
+while file_exists: 
+    pass
 #create a menu with different options and features:
 #show in the menu which file is currently opened
 #show in the menu how many questions are contained in the file
