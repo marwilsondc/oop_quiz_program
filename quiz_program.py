@@ -25,32 +25,65 @@ def count_questions():
     
 #define get_question()
 def get_question(code: int) -> str:
+    break_flag = False
+
     with open(file_path, "r") as file:
-        content = file.read()
-        ques_index = content.find(f"<{code:b}> <question>")
-        spec_ques = content[ques_index].replace(f"<{code:b}> <question>:", "")
-        return spec_ques
+        content = file.readlines()
+
+        for i in content:
+            if i.startswith(f"<{code:b}> <question>"):
+                spec_ques = i
+                break_flag = True
+
+            elif break_flag:
+                break
+
+            else:
+                continue
+
+        return spec_ques.replace(f"<{code:b}> <question>:", "")
 
 #define get_choices()
 def get_choices(code: int) -> list:
     choice_list = list()
+    break_flag = False
 
     with open(file_path, "r") as file:
-        content = file.read()
-        choice_index = content.find(f"<{code:b}> <choice>")
-        for i in range(4):
-            choice_list.append(content[choice_index + i])
-            choice_list[i].replace(f"<{code:b}> <choice>", "")
+        content = file.readlines()
+        
+        for i in content: 
+            if i.startswith(f"<{code:b}> <choice>"):
+                choice_list.append(i.replace(f"<{code:b}> <choice>:", ""))
+                break_flag = True
+            
+            elif break_flag:
+                break
+
+            else:
+                continue
         
         return choice_list
 
             
 #define get_correct()
 def get_correct(code: int) -> str:
+    break_flag = False
+
     with open(file_path, "r") as file:
-        content = file.read()
-        corr_index = content.find(f"<{code:b}> <correct>")
-        return content[corr_index].replace(f"<{code:b}> <correct>", "")
+        content = file.readlines()
+
+        for i in content:
+            if i.startswith(f"<{code:b}> <correct>"):
+                correct_ans = i.replace(f"<{code:b}> <correct>:", "")
+                break_flag = False
+            
+            elif break_flag:
+                break
+
+            else:
+                continue
+        
+        return correct_ans
     
 #define check_ans()
 def check_ans(user_input: str, correct: str) -> bool: 
@@ -84,7 +117,7 @@ def current_dir() -> str:
 while file_exists: 
     local_count = count_questions()
     local_path = current_dir()
-    ques_range = range(local_count)
+    ques_range = range(1, local_count + 1)
 
     #Create the main menu:
     print(f"""
