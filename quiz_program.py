@@ -4,7 +4,7 @@ import time
 import random
 
 #initialize file_path and file_exists
-file_path = Path("~", "Documents", "questions_2.txt").expanduser()
+file_path = Path("~", "Documents", "questions.txt").expanduser()
 file_exists: bool = None
 
 #program checks if questions.txt exists, if so, set file_exists to True. Otherwise, False
@@ -134,8 +134,8 @@ Main Menu:
 """)
     #Create prompt to choose among the given options
     while True:
-        user_select = input("Select from the menu above!")
-        if user_select.isnumeric and int(user_select) < 5:
+        user_select = input("Select from the menu above!: ")
+        if user_select.isnumeric() and int(user_select) < 5:
             break
         else:
             continue
@@ -154,7 +154,7 @@ Main Menu:
         correct_ans = get_correct(rand_ques_indx)
 
         time.sleep(3)
-        user_ans = input("Answer: ")
+        user_ans = input("Choose your answer: ")
 
         if check_ans(user_ans, correct_ans):
             print("Very good! You answered correctly!")
