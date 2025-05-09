@@ -74,7 +74,7 @@ def get_correct(code: int) -> str:
 
         for i in content:
             if i.startswith(f"<{code:b}> <correct>"):
-                correct_ans = i.replace(f"<{code:b}> <correct>:", "")
+                correct_ans = i.replace(f"<{code:b}> <correct>:", "").replace("\n", "")
                 break_flag = False
             
             elif break_flag:
@@ -155,8 +155,11 @@ Main Menu:
 
         if check_ans(user_ans, correct_ans):
             print("Very good! You answered correctly!")
+            time.sleep(1)
+
         else:
             print(f"Sorry, your answer is wrong! The answer was: {correct_ans}")
+            time.sleep(1)
 
     #option: Ask all questions; still random, but asks all questions
     elif user_select == 2:
@@ -168,8 +171,9 @@ Main Menu:
         time.sleep(1)
         print("Session begins now...")
 
-        questions_asked = 0
         asked_codes = list()
+        questions_asked = len(asked_codes)
+        score = 0
 
         while questions_asked != local_ques_count:
             break_flag = False
@@ -188,11 +192,13 @@ Main Menu:
                 questions_asked += 1
 
                 time.sleep(3)
-                user_input = input("Input your answer: ")
+                user_ans = input("Input your answer: ")
 
-                if check_ans(user_input, correct_ans):
+                if check_ans(user_ans, correct_ans):
                     time.sleep(1)
                     print("Very good! Onto the next question!")
+                    score += 1
+
 
                 else:
                     print(f"Your answer is wrong! The answer was {correct_ans}")
@@ -214,6 +220,8 @@ Main Menu:
                 
                 if break_flag:
                     break
+        
+        print(f"You answered {score} questions right!")
 
 
     #option: Change directory; change which file the program will access
