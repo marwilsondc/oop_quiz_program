@@ -112,16 +112,16 @@ def current_dir() -> str:
 
 #initiate infinite while-loop
 while file_exists: 
-    local_count = count_questions()
+    local_ques_count = count_questions()
     local_path = current_dir()
-    ques_range = range(1, local_count + 1)
+    ques_range = range(1, local_ques_count + 1)
 
     #Create the main menu:
     print(f"""
 Welcome to the Quizzler!
 
 File currently opened: {local_path}
-There are {local_count} questions in this file.
+There are {local_ques_count} questions in this file.
 Main Menu:
 
 [1] Ask Random Question
@@ -141,14 +141,14 @@ Main Menu:
 
     #option: Ask random question; program asks a random question
     if user_select == 1:
-        rand_ques_indx = random.choice(ques_range)
+        rand_ques_code = random.choice(ques_range)
         print("Okay! Giving you a random question now: ")
-        print(get_question(rand_ques_indx))
+        print(get_question(rand_ques_code))
 
-        for i in get_choices(rand_ques_indx):
+        for i in get_choices(rand_ques_code):
             print(i)
 
-        correct_ans = get_correct(rand_ques_indx)
+        correct_ans = get_correct(rand_ques_code)
 
         time.sleep(3)
         user_ans = input("Choose your answer: ")
@@ -159,11 +159,65 @@ Main Menu:
             print(f"Sorry, your answer is wrong! The answer was: {correct_ans}")
 
     #option: Ask all questions; still random, but asks all questions
-    if user_select == 2:
-        pass
+    elif user_select == 2:
+        print("The program will now ask you all the questions in this file")
+        time.sleep(1)
+        print("There will be no particular flow in the asking of questions, all questions will be given at random.")
+        time.sleep(1)
+        print("Once all questions are asked, the session will end")
+        time.sleep(1)
+        print("Session begins now...")
+
+        questions_asked = 0
+        asked_codes = list()
+
+        while questions_asked != local_ques_count:
+            break_flag = False
+            rand_ques_code = random.choice(ques_range)
+            
+            if rand_ques_code in asked_codes:
+                continue
+
+            else:
+                print(get_question(rand_ques_code))
+                for i in get_choices(rand_ques_code):
+                    print(i)
+
+                correct_ans = get_correct(rand_ques_code)
+                asked_codes.append(rand_ques_code)
+                questions_asked += 1
+
+                time.sleep(3)
+                user_input = input("Input your answer: ")
+
+                if check_ans(user_input, correct_ans):
+                    time.sleep(1)
+                    print("Very good! Onto the next question!")
+
+                else:
+                    print(f"Your answer is wrong! The answer was {correct_ans}")
+                    time.sleep(2)
+
+                    while True: 
+                        user_select = input("Continue session? (y/n): ")
+                        if user_select.isalpha() and user_select == "y":
+                            break
+
+                        elif user_select.isalpha() and user_select == "n":
+                            break_flag = True
+                            print("Ending session...")
+                            time.sleep(1)
+                            break
+
+                        else: 
+                            continue
+                
+                if break_flag:
+                    break
+
 
     #option: Change directory; change which file the program will access
-    if user_select == 3:
+    elif user_select == 3:
         print("If you want to change the file to access, it is recommended that you first create a text file with the quiz creator.")
         time.sleep(1)
         print("Input the name of the file you want to access (without the file extension or \".txt\")")
@@ -174,5 +228,5 @@ Main Menu:
         print(f"Done! Moved to {current_dir()}")
 
     #option: Quit program; breaks the loop and closes the program
-    if user_select == 4:
+    elif user_select == 4:
         break
