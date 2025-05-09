@@ -90,9 +90,6 @@ def check_ans(user_input: str, correct: str) -> bool:
     if user_input == correct:
         return True
     
-    elif correct.startswith(user_input):
-        return True
-    
     else:
         return False
 
@@ -162,5 +159,20 @@ Main Menu:
             print(f"Sorry, your answer is wrong! The answer was: {correct_ans}")
 
     #option: Ask all questions; still random, but asks all questions
+    if user_select == 2:
+        pass
+
     #option: Change directory; change which file the program will access
+    if user_select == 3:
+        print("If you want to change the file to access, it is recommended that you first create a text file with the quiz creator.")
+        time.sleep(1)
+        print("Input the name of the file you want to access (without the file extension or \".txt\")")
+        time.sleep(1)
+        file_change = input("File name: ")
+        
+        change_dir(file_change)
+        print(f"Done! Moved to {current_dir()}")
+
     #option: Quit program; breaks the loop and closes the program
+    if user_select == 4:
+        break
